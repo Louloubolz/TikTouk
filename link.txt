@@ -1,0 +1,3 @@
+https://stackoverflow.com/questions/51928807/moviepy-cant-detect-imagemagick-binary-on-windows
+https://chocolatey.org/install
+https://community.chocolatey.org/packages/ffmpeg
