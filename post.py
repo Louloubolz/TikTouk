@@ -3,7 +3,7 @@ import random
 import os
 import pandas as pd
 import shutil
-
+from instagrapi import Client
 
 
 def publish(): 
@@ -15,6 +15,7 @@ def publish():
         description = df.loc[df['vod_name'] == path, 'titre'].iloc[0]
 
     publish_tiktok("output/"+path, description)
+    publish_insta("output/"+path, description)
 
     deplacer_fichier("output/"+path, "archive/"+path )
     return 0 
@@ -31,9 +32,29 @@ def publish_tiktok(path, description):
 
     return True
 
-def publish_insta(path, description):
+def publish_insta(chemin_video, description):
+    # Remplacez ces informations par vos propres identifiants Instagram
+    username = 'votre_nom_utilisateur'
+    password = 'votre_mot_de_passe'
 
-    return 0
+    # Créez une instance du client Instagrapi
+    client = Client()
+
+    # Connectez-vous à votre compte Instagram
+    client.login(username, password)
+
+    try:
+        # Chargez la vidéo à partir du chemin spécifié
+        media = client.clip_upload(chemin_video, description)
+        print("Reel posté avec succès!")
+
+    except Exception as e:
+        print(f"Une erreur s'est produite : {e}")
+
+    # Déconnectez-vous du compte Instagram
+    client.logout()
+
+
 
 def publish_youtube(path, description): 
 
