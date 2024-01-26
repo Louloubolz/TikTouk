@@ -144,6 +144,19 @@ class App(ctk.CTk):
         self.prompt_tedX = ctk.CTkTextbox(self.tab2)
         self.prompt_tedX.pack(pady = 10)
 
+        self.tab3 = ctk.CTkFrame(self.notebook)
+        self.notebook.add(self.tab3, text="YouTube_repost")
+        entry_url_yt_tedX = ctk.CTkEntry(self.tab3, placeholder_text="Coller un url YT")
+        entry_url_yt_tedX.pack(pady=(50, 10))
+        button = ctk.CTkButton(self.tab3, text="Create videos", command = lambda : video.get_yt_video(link = self.entry_url_yt.get()))
+        button.pack(pady=10)
+        button = ctk.CTkButton(self.tab3, text="Poster last video", command = lambda : post.publish())
+        button.pack(pady=10)
+        nb_video_prete = ctk.CTkLabel(self.tab3, text= "Nb vidéo pretes : 0")
+        nb_video_prete.pack(pady = 10)
+        self.prompt_tedX = ctk.CTkTextbox(self.tab3)
+        self.prompt_tedX.pack(pady = 10)
+
     def select_file(self, type):
         if type == 'mp4': 
             self.path_mp4 = filedialog.askopenfilename(title="Sélectionner un fichier mp4", filetypes=[("Fichiers mp4", "*.mp4")])
