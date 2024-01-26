@@ -81,7 +81,22 @@ def create_videos(background_link, music_link, number, prompt, type = 'story', c
             print("-------- 4 : Saving Video")
             save.save_infos(name_project, "test")
              
-    elif type == 'tedx': 
+    elif type == 'youtube': 
+
+        name_session = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+        print("------- 0 : Downloading Video ")
+
+        video.get_yt_video(background_link,name_session+'_background.mp4' , True)
+
+        name_project = 'video' + name_session
+        
+        print("-------- 3 : Generating Video")
+        montage.create_vertical_split_video(name_session, name_project, name_srt  = '', name_srt_words = '')
+
+        print("-------- 4 : Saving Video")
+        save.save_infos(name_project, "BO Youtube")
+
         return True
 
 
@@ -130,12 +145,10 @@ class App(ctk.CTk):
 
 
         self.tab2 = ctk.CTkFrame(self.notebook)
-        self.notebook.add(self.tab2, text="Ted X")
+        self.notebook.add(self.tab2, text="Youtube")
         entry_url_yt_tedX = ctk.CTkEntry(self.tab2, placeholder_text="Coller un url YT")
         entry_url_yt_tedX.pack(pady=(50, 10))
-        self.entry_nb_video_tedX = ctk.CTkEntry(self.tab2, placeholder_text="nombre de video")
-        self.entry_nb_video_tedX.pack(pady=10)
-        button = ctk.CTkButton(self.tab2, text="Export Vidéo", command = lambda : video.get_yt_video(link = self.entry_url_yt.get()))
+        button = ctk.CTkButton(self.tab2, text="Export Vidéo", command = lambda : self.call_create_video())
         button.pack(pady=10)
         button = ctk.CTkButton(self.tab2, text="Poster last video", command = lambda : post.publish())
         button.pack(pady=10)

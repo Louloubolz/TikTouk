@@ -11,14 +11,18 @@ def choisir_fichiers_aleatoires(dossier = 'input/'):
     return dossier + fichier_mp4_aleatoire, dossier + fichier_mp3_aleatoire
 
 
-def get_yt_video(link, name_project):
+def get_yt_video(link, name_project, is_yt = False):
     if "youtube.com" in link or "youtu.be" in link:
         path = 'input/'
         video = YouTube(link)
         stream = video.streams.get_highest_resolution()
         stream.download(path, name_project)
     if link == '': 
-        os.rename(choisir_fichiers_aleatoires()[0], 'input/' + name_project)
+        if not is_yt :  os.rename(choisir_fichiers_aleatoires()[0], 'input/' + name_project)
+        else : 
+            os.rename(choisir_fichiers_aleatoires('youtube/')[0], 'youtube/' + name_project)
+            os.rename(choisir_fichiers_aleatoires()[0], 'input/' + name_project)
+
     elif os.path.isfile(link): os.rename(link, 'input/' + name_project)
 
 

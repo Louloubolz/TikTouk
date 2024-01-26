@@ -29,7 +29,7 @@ def crop_video(video):
 
 def create_vertical_split_video(name_session, name_project, name_srt  = '', name_srt_words = ''):
 
-    video_top = "input/" + name_project + "_top.mp4"
+    video_top = "youtube/" + name_project + ".mp4"
     video_background_path = "input/" + name_session+'_background.mp4'
     output_path = "output/" + name_project +  ".mp4"
 
