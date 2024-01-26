@@ -27,11 +27,16 @@ def crop_video(video):
     return video 
 
 
-def create_vertical_split_video(video_top, video_bot, output_path):
+def create_vertical_split_video(name_session, name_project, name_srt  = '', name_srt_words = ''):
+
+    video_top = "input/" + name_project + "_top.mp4"
+    video_background_path = "input/" + name_session+'_background.mp4'
+    output_path = "output/" + name_project +  ".mp4"
+
     # Charger les vidéos d'entrée
     print("-------- 3.1 : Importing Vidéo")
     video_t = VideoFileClip(video_top)
-    video_b = VideoFileClip(video_bot)
+    video_b = VideoFileClip(video_background_path)
      # Générer un point de départ aléatoire
     
     total_duration = video_t.duration
@@ -60,13 +65,15 @@ def create_vertical_split_video(video_top, video_bot, output_path):
     # Créer une composition verticale des deux vidéos
     final_video = clips_array([[video_t], [video_b]])
 
+    print("-------- 3.2 : Generating SRT")
+
+    video_final = subtitles.make_srt(name_project, final_video, name_srt , name_srt_words)
+
     print("-------- 3.3 : Rendering Video")
 
     # Écrire la vidéo résultante dans le fichier de sortie
     final_video.write_videofile(output_path, codec="libx264", bitrate="8000k", temp_audiofile="temp-audio.m4a", remove_temp=True, audio_codec="aac")
 
-
-create_vertical_split_video("input/2024-01-25_20-18-08_background.mp4","input/2024-01-25_20-18-08_background.mp4", "output/" +  "test.mp4")
 
 def combine_video_audio(name_project, name_session, name_srt  = '', name_srt_words = ''):
 
