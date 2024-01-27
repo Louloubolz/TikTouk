@@ -27,31 +27,24 @@ def crop_video(video):
     return video 
 
 
-def create_vertical_split_video(video_top, video_bot, output_path):
+def create_vertical_split_video(video_top, video_bot, start_t, duration):
     # Charger les vidéos d'entrée
     print("-------- 3.1 : Importing Vidéo")
     video_t = VideoFileClip(video_top)
     video_b = VideoFileClip(video_bot)
      # Générer un point de départ aléatoire
     
-    total_duration = video_t.duration
-    start_time = random.randint(120, int(total_duration) - 180) 
-    video_t = video_t.subclip(start_time )
-    video_t = video_t.set_duration(random.randint(2, 3))
-    video_t_duration = round(video_t.duration); 
+    video_t = video_t.subclip(start_t)
+    video_t = video_t.set_duration(duration)
     video_b_duration = round(video_b.duration); 
-    diff = - video_t_duration + video_b_duration -1
-
+    diff = - duration + video_b_duration -1
     if diff < 0 :
-        raise Exception("**** ERROR la video donnée est plus courte que l'audio généré *****")
+        raise Exception("**** ERROR la video background donnée est plus courte que la video yt *****")
 
     start = random.randint(0, diff)
 
     video_b = video_b.subclip(start)
-    video_b = video_b.set_duration(video_t.duration)
-
-    print(video_b.duration)
-    print(video_t.duration)
+    video_b = video_b.set_duration(duration)
 
     # Ajuster la taille de la vidéo 2 pour qu'elle ait la même hauteur que la vidéo 1
     video_t = video_t.resize(( 1080, 608))
@@ -60,13 +53,7 @@ def create_vertical_split_video(video_top, video_bot, output_path):
     # Créer une composition verticale des deux vidéos
     final_video = clips_array([[video_t], [video_b]])
 
-    print("-------- 3.3 : Rendering Video")
-
-    # Écrire la vidéo résultante dans le fichier de sortie
-    final_video.write_videofile(output_path, codec="libx264", bitrate="8000k", temp_audiofile="temp-audio.m4a", remove_temp=True, audio_codec="aac")
-
-
-create_vertical_split_video("input/2024-01-25_20-18-08_background.mp4","input/2024-01-25_20-18-08_background.mp4", "output/" +  "test.mp4")
+    return final_video
 
 def combine_video_audio(name_project, name_session, name_srt  = '', name_srt_words = ''):
 
@@ -135,3 +122,25 @@ def combine_video_audio(name_project, name_session, name_srt  = '', name_srt_wor
 
     video_clip.close()
     video_final.close()
+
+def create_yt_video(name_session, start, duration):
+
+    video_background_path = "input/" + name_session+'_background.mp4'
+    video_yt_path = "input/" + name_session+'.mp4'
+    n=3
+
+    duration_part = duration/n
+
+    for i in range(n):
+        start_part=start+i*duration
+        video = create_vertical_split_video(video_yt_path, video_background_path, start_part, duration_part)
+        #add subtitles
+        #add 'part i'
+        #create title (chat gpt ?)
+
+        print("-------- 3.3 : Rendering Video")
+
+        # Écrire la vidéo résultante dans le fichier de sortie
+        video.write_videofile("output/"+name_session+str(i)+".mp4", codec="libx264", bitrate="8000k", temp_audiofile="temp-audio.m4a", remove_temp=True, audio_codec="aac")
+
+
